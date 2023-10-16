@@ -1,0 +1,18 @@
+<textarea id="openaiOutput" rows="15"></textarea>
+<button onclick="startStreaming()">Start</button>
+
+<script>
+    let socket = new WebSocket('ws://' + window.location.host + '/ws/openai/');
+
+    socket.onmessage = function(e) {
+        let data = JSON.parse(e.data);
+        let message = data['message'];
+        document.getElementById('openaiOutput').value += message + '\n';
+    };
+
+    function startStreaming() {
+        socket.send(JSON.stringify({
+            'message': 'start'
+        }));
+    }
+</script>
